@@ -37,7 +37,7 @@ Our general idea is we’ll build upon the Homework 4 infrastructure, namely ins
 Linked below are examples of what we hope to demo:
 <ul>
     <li><a href="https://www.youtube.com/watch?v=XDhUXndVLJI">Honey Dripping on Cloth</a><br>
-    <p align="center"><iframe width="50%" src="https://www.youtube.com/watch?v=XDhUXndVLJI" title="Honey Dripping on Cloth" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></p></li>
+    <p align="center"><iframe width="560" height="315" src="https://www.youtube.com/embed/XDhUXndVLJI" title="Honey Dripping on Cloth" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></p></li>
     <li><a href="https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84">Honey Dripping on Sphere</a><br>
     <img src="../assets/proposal/honey_on_sphere.png"></li>
 </ul>

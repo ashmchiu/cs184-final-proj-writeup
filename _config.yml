@@ -1,9 +1,11 @@
 # Setup
 title:               'CS 184: Computer Graphics'
 tagline:             'Honey, I Upped the Viscosity!'
-# baseurl:             ''
+url:                 https://ashmchiu.github.io/cs184-proj-writeup/
+baseurl:             ''
 # paginate:            5
 permalink:           pretty
+
 
 # Gems
 plugins:
