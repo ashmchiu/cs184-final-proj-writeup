@@ -5,35 +5,34 @@ has_right_toc: true
 usemathjax: true
 nav_order: 1
 ---
-<p class="warning-message">
-This assignment has not been completed yet.
-</p>
 
 <img src="../assets/honey.png" width="30%" align="right" />
 
-## Honey, I Upped the Viscosity
+<h2><strong>Honey, I Upped the Viscosity!</strong></h2>
 Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan
 
 ## Summary
-In this project, we aim to simulate honey, as well as the physics of honey falling onto different geometric surfaces and reflecting light through space. We hope to use some of the following surfaces, dripping the honey onto it with different orientations (vertical, horizontal, etc).
-- Sphere: Honey should stick and flow down the sphere and pool at the bottom before dripping off.
-- Cloth: Honey may stick to the cloth and either spread slowly throughout, or be absorbed by the fabric. A stain will be left behind. 
+In this project, we aim to simulate the flow and viscosity of honey, as well as the physics of honey falling onto different geometric surfaces and reflecting light through space. We hope to use some of the following surfaces, dripping the honey onto it with different orientations (vertical, horizontal, etc).
+- **Sphere**: Honey should stick and flow down the sphere and pool at the bottom before dripping off.
+- **Cloth**: Honey may stick to the cloth and either spread slowly throughout, or be absorbed by the fabric. A stain will be left behind. 
+
+If time permits, we'd also like to simulate interactions with honey and other materials such as wood and porous cloths (a full list of potential materials we'd want to model honey flowing off can be found [here](#stretch-goals)).
 
 ## Problem Description
-We are especially interested in implementing particle systems for highly viscous liquids, particularly for honey, which is a complex liquid that is semi transparent and sticky. We hope to be able to combine the particle system for honey with the point mass system in homework 4, which could then be generalized to other slow and thick liquids that interact with more solid objects.
+We are especially interested in implementing particle systems for highly viscous liquids, particularly for honey, which is a complex liquid that is semi-transparent and sticky. We hope to be able to combine the particle system for honey with the point mass system in homework 4, which could then be generalized to other slow and thick liquids that interact with more solid objects.
 
-### Why it is important
-This problem is important because we can see how honey interacts with certain surfaces, and we can apply the principles we learn to other forms of liquid. Furthermore, as a viscous liquid, this will provide an understanding of fluid dynamics and the interaction between liquid-solid objects.
+### Why it's Important
+This problem is important because we can see how honey interacts with certain surfaces, and we can apply the principles we learn to other forms of liquid. Furthermore, as a viscous liquid, this will provide an understanding of fluid dynamics and the interaction between liquids and solid objects.
 
-### Where it is challenging
+### Challenges
 This project will be challenging in the following ways:
-- Rendering the liquid to appear thick and syrupy, as well as flow smoothly
+- Rendering liquids (as all our previous work has been on solid objects)
+- Modeling the liquid to appear thick and syrupy, as well as flow smoothly
 - Handling collisions between solids and fluids (the main premise of our project), particularly because honey can stick/leave a residue
-- Modeling porous materials, since all our work has been on solid objects recently
 
-Our general idea is we’ll build upon the Homework 4 infrastructure, namely instead of seeing how the cloth moves, we’ll be using the cloth as a material for honey to fall on. We were thinking of using Modeling and Rendering Viscous Liquids as a backbone to render honey off of (tuning viscosity and coloring). This simulation of honey will exist within the Homework 4 framework (maybe dripping honey on a plane to start with). We believe this realistic rendering of honey will take up a bulk of our time, but following that, we will drip the honey onto a sphere and cloth, and if time permits, porous materials and other surfaces laid out below. We hope we will be able to accomplish our goals with both the shader knowledge and point mass knowledge from Homework 4, as well as new knowledge of particle systems. 
+Our general idea is we’ll build upon the Homework 4 infrastructure, namely instead of seeing how the cloth moves, we’ll be using the cloth as a material for honey to fall on. We were thinking of using [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84) as a backbone to render honey off of (tuning viscosity and coloring to look like honey as opposed to a generic liquid). This simulation of honey will exist within the Homework 4 framework (maybe dripping honey on a plane to start with). We believe this realistic rendering of honey will take up a bulk of our time, but following that, we will drip the honey onto a sphere and cloth, and if time permits, porous materials and other surfaces laid out below. We hope we will be able to accomplish our goals with both the shader knowledge and point mass knowledge from Homework 4, as well as new knowledge of particle systems. 
 
-### Hopeful outputs
+### Hopeful Outputs
 Linked below are examples of what we hope to demo:
 <ul>
     <li><a href="https://www.youtube.com/watch?v=XDhUXndVLJI">Honey Dripping on Cloth</a><br>
@@ -47,7 +46,7 @@ Our main deliverable is to create images detailing key moments in the simulation
 
 Since we're working off the infrastructure for Homework 4, we’ll create one render that has a cloth stretched out in the horizontal plane and some honey dripping onto it. Another render is going to be a render that uses a sphere instead of a cloth. The honey will fall on top of the sphere and show how the honey interacts with the surface over time. These somewhat replicate the experiences shown above in our [Problem Description](#hopeful-outputs).
 
-The questions we hope to plan to answer with our analysis are:
+The questions we hope to answer with our analysis are:
 - How can we simulate realistic honey?
 - How does honey interact with spheres/cloths when dripped onto these surfaces?
 
@@ -57,26 +56,26 @@ Creating quantifiable metrics for this project are difficult because we're mainl
 
 ### Expected Goals
 As a baseline, we should be able to render honey so that it flows and appears similar to honey in real life. In addition, it should be able to come in contact with other objects and flow similar to how it would in real life.
-- **Rendering realistic honey**: Generating the geometry of honey volume, adding material shading, adding ray tracing/global illumination, adding point mass simulation
-- **Dripping honey onto cloth**: Collision with cloth material, honey pools onto the cloth
-- **Dripping honey onto a sphere**: Collision with sphere
+- **Rendering realistic honey**: Generating the geometry of honey volume, adding material shading, adding ray tracing/global illumination, adding point mass simulation, making the honey transparent.
+- **Dripping honey onto cloth**: Collision with cloth material, honey pools onto the cloth. We want to mimic the video shown [here](#hopeful-outputs), where we can see the honey falling onto the cloth, and then partially leaving a residue when it slips off.
+- **Dripping honey onto a sphere**: Collision with sphere, honey drips off the sphere like shown in the image [here](#hopeful-outputs). This demonstrates the viscosity of honey even better than the cloth as the honey slips down the sphere, pooling at the bottom, before dripping off.
 
 ### Stretch Goals
 We do have some stretch goals as well, if we have the time!
-- **Add residue from honey** to cloth and sphere
+- **Add residue from honey** to cloth and sphere. Of the stretch goals, we believe this is the most important to make the simulations as realistic as possible (since honey is a substance that is known to be sticky).
 - **Drip honey onto additional surfaces**. This will be a little difficult because none of us have used Unity/Blender before, so we'll need to research models for a lot of the materials that we're using to make the simulation look realistic. However, if we have the time, we think this could be fun!
-   - Bread: Honey may be partially absorbed by the bread
-   - Wood: Honey might seep into the pores of wood surfaces, and leave a light stain
-   - Foam: Honey could partially absorb into the foam material, and leave a sticky residue
-   - Glass: Honey will stick to glass and if it’s at an angle, honey will slowly fall in the direction of steepest descent. In this scenario, honey will also leave a trail behind. 
-   - Ceramic: Honey may adhere to the surface and spread out slightly
-   - Fishnet/Wireframe: Honey may drip through the holes of the fishnet, while leaving some stains on the surface.
-- **Model honey crystallization** over time, and its interactions with different materials
+   - Bread: Honey may be partially absorbed by the bread. This is a more realistic interaction of honey, which is pretty tasty on bread!
+   - Wood: Honey might seep into the pores of wood surfaces, and leave a light stain. Wood staining is definitely a stretch goal because we'd have to interpolate between the grain of the wood and the color of our honey.
+   - Foam: Honey could partially absorb into the foam material, and leave a sticky residue. We find it to be interesting to interact with foam because foam is porous and honey could seep into the foam.
+   - Glass: Honey will stick to glass and if it’s at an angle, honey will slowly fall in the direction of steepest descent. In this scenario, honey will also leave a trail behind. Glass would be difficult but cool because it could potentially refract and displace the honey at specific angles.
+   - Ceramic: Honey may adhere to the surface and spread out slightly.
+   - Fishnet/Wireframe: Honey may drip through the holes of the fishnet, while leaving some stains on the surface. This we think will be particularly difficult considering that we've never modeled porous materials before.
+- **Model honey crystallization** over time, and its interactions with different materials.
 
 ## Schedule
-- **Week 0: (3/31-4/6)**: Get familiar with relevant research papers/videos, as well as computing frameworks involved
-- **Week 1 (4/7-4/13)**: Render realistic honey. Start to figure out the consistency, texture, and how honey interacts with light and falls. Start to implement the particle system for the honey, taking into account friction, volume, and viscosity
-- **Week 2 (4/14-4/20)**: Finish rendering realistic honey. Render Cloth and sphere surfaces, as well as create the adhesion matrix and model 
+- **Week 0 (3/31-4/6)**: Get familiar with relevant research papers/videos, as well as computing frameworks involved.
+- **Week 1 (4/7-4/13)**: Render realistic honey. Start to figure out the consistency, texture, and how honey interacts with light and falls. Start to implement the particle system for the honey, taking into account friction, volume, and viscosity.
+- **Week 2 (4/14-4/20)**: Finish rendering realistic honey. Render cloth and sphere surfaces, as well as create the adhesion matrix and model.
 - **Week 3 (4/21-4/28)**: Dripping honey onto surfaces, by applying techniques such as tweaking the adhesion matrix and raising the force to be higher than gravitational force.
 - **Week 4 (4/28 - 5/4)**: Attempt stretch goals (maybe learn about Unity/Blender), and prepare/practice for the final presentation.
 

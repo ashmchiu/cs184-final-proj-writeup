@@ -5,4 +5,5 @@ title: Home
 
 # Welcome
 
-- [Proposal](/proposal.md)
+- [in progress] [proposal](/proposal.md)
+- [not started] [milestone](/milestone.md)
