@@ -5,5 +5,4 @@ title: Home
 
 # Welcome
 
-- [in progress] [proposal](/proposal.md)
-- [not started] [milestone](/milestone.md)
+[proposal](/proposal.md) [Apr 2, 2024] \| [milestone](/milestone.md) [Apr 16, 2024]
