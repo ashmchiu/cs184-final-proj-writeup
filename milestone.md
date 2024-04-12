@@ -3,13 +3,13 @@ layout: page
 title: 'Milestone'
 has_right_toc: true
 usemathjax: true
-nav_order : 2
+nav_order : 1
 ---
 <p class="warning-message">
 This assignment has not been completed yet.
 </p>
 
-<h2><strong>Honey, I Upped the Viscosity!</strong></h2>
+<h2><strong>Honey, I Upped the Viscosity! 🍯</strong></h2>
 Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan
 
 ## What We've Accomplished

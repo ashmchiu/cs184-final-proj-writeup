@@ -3,7 +3,7 @@ layout: page
 title: 'Proposal'
 has_right_toc: true
 usemathjax: true
-nav_order: 1
+nav_order: 2
 ---
 
 <img src="../assets/honey.png" width="30%" align="right" />
