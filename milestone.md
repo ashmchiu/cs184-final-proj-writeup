@@ -12,9 +12,9 @@ Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan
 
 We've built out a particle model based on Homework 4's `PointMass` class, constructing a scene with a sphere of `PointMass`es hovering over a `Sphere` `CollisionObject`. 
 
-Next, we simulated honey fluid dynamics using [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84) as a reference. We implemented liquid-solid interactions so the honey sticks to the sphere, liquid-liquid interactions to build viscosity and momentum exchange between the honey particles, and refined interpenetration prevention and volume preservation to prevent a 2D-ification of the honey as it pools at the bottom on the plane.
+<img src="../assets/milestone/adhesion.png" width="25%" align="right" />
 
-Finally, we also incorporated OpenMP parallelization, which sped up our simulations from effectively unrunnable (buffering at every time step) to what we can see in the [Preliminary Results](#preliminary-results) below!
+Simulating honey fluid dynamics using [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84), we implemented liquid-solid interactions so the honey sticks to the sphere, liquid-liquid interactions to build viscosity between the honey particles, and refined interpenetration prevention and volume preservation to prevent a 2D-ification of the honey as it pools at the bottom on the plane. To speed up our simulations, which were effectively unrunnable (buffering at every time step), we utilized spatial hashing for neighbor particle searching (via `Cell`s) and incorporated OpenMP parallelization over all possible `for` loops. Parallelizing neighbor search and particle-sphere collision at every time step had the most impact.
 
 ## Preliminary Results
 TODO
