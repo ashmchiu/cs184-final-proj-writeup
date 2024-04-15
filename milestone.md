@@ -20,10 +20,10 @@ At first, our simulations were effectively unrunnable (buffering at every frame)
 
 ## Preliminary Results
 <div align="center">
-    <img src="../assets/milestone/progress.gif" width="30%" />
+    <img src="../assets/milestone/milestone.gif" width="30%"/>
 </div>
 
-Using 60 frames per second, and 20 simulation steps per frame.
+Using 90 frames per second, and 30 simulation steps per frame. A higher resolution version is on [YouTube](https://www.youtube.com/watch?v=bTU5N-Q4zXk).
 
 ## Reflections
 In our current simulations, we like that the particles are attracted to the sphere, wrapping around rather than falling straight down. However, we'd like to fix a few things in **particle movementes**:
