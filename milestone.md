@@ -26,7 +26,7 @@ At first, our simulations were effectively unrunnable (buffering at every frame)
 Using 90 frames per second, and 30 simulation steps per frame. A higher resolution version is on [YouTube](https://www.youtube.com/watch?v=bTU5N-Q4zXk).
 
 ## Reflections
-In our current simulations, we like that the particles are attracted to the sphere, wrapping around rather than falling straight down. However, we'd like to fix a few things in **particle movementes**:
+In our current simulations, we like that the particles are attracted to the sphere, wrapping around rather than falling straight down. However, we'd like to fix a few things in **particle movements**:
 - **volume preservation**: preserve density across honey particles. The particles are treated discretely so there's a 2D-ification of honey as it pools flatly at the bottom on the plane, but it should coil.
 - **snail trail**: tune interpenetration and volume preservation. The particles should mushroom out before hitting the sphere based on our [reference](/assets/proposal/honey_on_sphere.png), but now there's a thin particle strand at the top.
 
