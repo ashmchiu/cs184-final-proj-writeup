@@ -295,6 +295,10 @@ a.sidebar-nav-item:focus {
   .content-container figcaption {
     font-size: 8px;
   }
+
+  ::-webkit-scrollbar {
+    display: none;
+}
 }
 
 /* Slide effect
