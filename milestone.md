@@ -20,15 +20,15 @@ At first, our simulations were effectively unrunnable (buffering at every frame)
 
 ## Preliminary Results
 <div align="center">
-    <img src="../assets/milestone/milestone.gif" width="30%"/>
+    <img src="../assets/milestone/milestone_update.gif" width="30%"/>
 </div>
 
-Using 90 frames per second, and 30 simulation steps per frame. A higher resolution version is on [YouTube](https://www.youtube.com/watch?v=bTU5N-Q4zXk).
+Using 90 frames per second, and 30 simulation steps per frame. A higher resolution version is on [YouTube](https://youtu.be/XzGDkuJSUBg).
 
 ## Reflections
 In our current simulations, we like that the particles are attracted to the sphere, wrapping around rather than falling straight down. However, we'd like to fix a few things in **particle movements**:
 - **volume preservation**: preserve density across honey particles. The particles are treated discretely so there's a 2D-ification of honey as it pools flatly at the bottom on the plane, but it should coil.
-- **snail trail**: tune interpenetration and volume preservation. The particles should mushroom out before hitting the sphere based on our [reference](/assets/proposal/honey_on_sphere.png), but now there's a thin particle strand at the top.
+- **snail trail**: particles should mushroom out before colliding with the sphere ([reference](/assets/proposal/honey_on_sphere.png)), but they immediately hit the sphere unnaturely with a few sparse particles trickling down.
 
 ## Updated Work Plan
 We want to focus more time on making our viscosity models more realistic than originally intended so we've limited dripping honey on just the sphere since it demonstrates honey-solid adhesion well. Our first goal is to **tune particle movements and volume preservation**. Then, while we've built out particle simulation in Homework 4 infrastructure, to replicate the visual experience of honey, we will **use [marching cubes](https://www.cs.toronto.edu/~jacobson/seminar/lorenson-and-cline-1987.pdf)** and **port meshes into Blender**. Then, we simulate the texture of honey with a **BSDF**, **ray trace shadows**, and make honey reflect and **refract environments** (stretch goal). Our updated schedule is
