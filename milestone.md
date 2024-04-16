@@ -7,7 +7,7 @@ nav_order : 1
 ---
 <h2><strong>Honey, I Upped the Viscosity! 🍯</strong></h2>
 <i>Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan</i> | 
-[Slides](https://docs.google.com/presentation/d/1XChTjyzATtKneU5rBeOULRzXM5DbCcm-AcWQce74FTo/edit#slide=id.p) \| Video (TBD)
+[Slides](https://docs.google.com/presentation/d/1XChTjyzATtKneU5rBeOULRzXM5DbCcm-AcWQce74FTo/edit#slide=id.p) \| [Video](https://youtu.be/3IcuNlEuynY)
 
 ## What We've Accomplished
 <img src="../assets/milestone/adhesion.png" width="25%" align="right" />
@@ -23,11 +23,11 @@ At first, our simulations were effectively unrunnable (buffering at every frame)
     <img src="../assets/milestone/milestone_update.gif" width="30%"/>
 </div>
 
-Using 90 frames/second, 30 steps/frame, and 20,000 particles. A higher resolution version is on [YouTube](https://youtu.be/XzGDkuJSUBg).
+90 frames/second, 30 steps/frame, 20,000 particles. A higher resolution version is on [YouTube](https://youtu.be/XzGDkuJSUBg).
 
 ## Reflections
 In our current simulations, we like that the particles are attracted to the sphere, wrapping around rather than falling straight down. However, we'd like to fix a few things in **particle movements**:
-- **volume preservation**: preserve density across honey particles. The particles are treated discretely so there's a 2D-ification of honey as it pools flatly at the bottom on the plane, but it should coil.
+- **volume preservation**: preserve density across honey particles. The particles are treated discretely so there's a 2D-ification as it pools flatly on the plane, when the honey should coil.
 - **snail trail**: particles should mushroom out before colliding with the sphere ([reference](/assets/proposal/honey_on_sphere.png)), but they immediately hit the sphere unnaturely with a few sparse particles trickling down.
 
 ## Updated Work Plan
