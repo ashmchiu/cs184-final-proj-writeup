@@ -14,7 +14,7 @@ Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan
 
 ## Abstract
 
-## Technical Approach
+## Technical Approach (challenges and lessons learned are incorporated here)
 
 ### Starting Point and Set Up
 We built off of CS184's Project 4; we converted the PointMass class to a Particle class, with attributes such as velocity, radius, mass, and momentum, as well as viscosity. We then created a new scene with 3 planes, and one sphere. In terms of the particles, we put all of their positions into a ball first of 0.08 radius, and used used openGL's `GL_POINTS` and drew them into an array to render them as points.
@@ -126,6 +126,7 @@ In our existing simulation, we wrote a script to record particle positions every
 
 We had to tune the size of the metaballs, as well as make sure we have at least 1k particles, or else we ended up with boba like honey that had individual orbs. If there were 2k or 3k particles, metaball sizes of 0.04 to 0.07 were enough, while with only 1k particles, we had to use 0.08 to 0.1.
 [INSERT BOBA VIDEO]
+[INSERT OFF CENTER SPHERE VIDEO]
 
 Overall, we learned the importance of exploring and adopting various meshing/rendering techniques, as well as the importance of using suitable and well documented methods. We also got a taste of just how tedious rendering can be - both Ashley and Dana had to run Blender/render all the frames over the course of 2 full days to get only a 2-3 second video!
 
