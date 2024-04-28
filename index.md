@@ -46,6 +46,8 @@ Overall, implementing the particle physics allowed us to understand the amount o
 #### Smoothed Particle Hydrodynamics
 [TODO: INSERT VIDEO WITH THEIR SPH]
 
+[TODO: RAYMOND & EMAN WRITE]
+
 
 ### Surface Reconstruction
 
@@ -81,16 +83,15 @@ Finding Marching Cubes to be a common solution, we initially tried building off 
 
 
 #### OpenVDB
-When attempting to generate meshes for surface reconstruction from particles in OpenVDB, we struggled a great deal with installation problems as all four had hours of compilation errors and package issues in installation. Beyond this, there was limited documentation, etc. etc. TODO: FINSIH
-[TODO: TALK ABOUT INSTALLATION PROBLEMS, LIMITED DOCUMENTATION, CONVERTING FROM POINTS TO VOLUME TO MESH]
+When attempting to generate meshes for surface reconstruction from particles in OpenVDB, we struggled a great deal with installation problems as all four had hours of compilation errors and package issues in installation. Beyond this, there was limited documentation, etc. etc. 
+
+[TODO: RAYMOND & EMAN WRITE]
+[TALK ABOUT INSTALLATION PROBLEMS, LIMITED DOCUMENTATION, CONVERTING FROM POINTS TO VOLUME TO MESH]
 
 #### Metaballs
 Our last attempt at "surface reconstruction" was to script the particle positions at each 16-32 timesteps to each represent a Metaball, using the `bpy` Blender Python package. The most we could render was approximately 3k particles, hence why we were unable to render our SPH simulation using Metaballs.
 
 Tuning the size of Metaballs so it didn't look like individual orbs of honey (or honey boba), we set the Metaball size to 0.04 to 0.07 for simulations with 2,000-3,000 particles, and to 0.08 to 0.1 for simulations with 1,000 particles.
-
-[TODO: INSERT BOBA VIDEO]
-[TODO: INSERT OFF CENTER SPHERE VIDEO]
 
 Overall, we learned the importance of exploring and adopting various meshing techniques, and the importance of using suitable and well-documented methods.
 
@@ -108,6 +109,25 @@ Through these two problems, we learned to divide and conquer work here so pairin
 
 ## Results
 TODO
+
+<div align="center">
+  <table style="width:100%">
+<colgroup>
+      <col width="50%" />
+      <col width="50%" />
+  </colgroup>
+    <tr>
+    <td align="center">
+        <img src="assets/index/lagrangian_no_vol_preservation.gif" width="75%" height="100%"/>
+        <figcaption>Lagrangian Simulation (w/o volume preservation), 3000 particles</figcaption>
+        </td>
+        <td align="center">
+        <img src="assets/index/lagrangian_vol_preservation.gif" width="75%" />
+        <figcaption>Lagrangian Simulation (w/ volume preservation), 2000 particles</figcaption>
+        </td>
+    </tr>
+    </table>
+</div>
 
 ## References
 - [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84)
