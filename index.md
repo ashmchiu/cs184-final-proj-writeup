@@ -122,7 +122,28 @@ When attempting to generate meshes for surface reconstruction from particles in 
 
 To get the meshes to output using OpenVDB, we first had to convert our particles to a custom `MyParticle` struct, which we defined to store the position, velocity, and radius of the particle. We then constructed a grid using the OpenVDB `createLevelSet`. Next, we `raster`ed to set the grain size, and initialize the particles into spheres for our grid. Finally, we used `VolumeToMesh` to get a `.obj` mesh file from our grid, importing these files into Blender, and stitching using [Stop-Motion-Obj](https://github.com/neverhood311/Stop-motion-OBJ). 
 
-We found the animation to be a lot more smooth with this method, as all the particles remained connected during the animation, much like real honey would while being dropped onto a sphere. Generating the obj files was relatively quick as well, which allowed us to perform parameter-tuning a lot easier. However, one problem we found with OpenVDB meshes was that they were far too angular, which wasn't ideal for our simulation, which led to our last attempt at "surface reconstruction", which was Metaballs.
+We found the animation to be a lot more smooth with this method, as all the particles remained connected during the animation, much like real honey would while being dropped onto a sphere. Generating the obj files was relatively quick as well, which allowed us to perform parameter-tuning a lot easier. However, one problem we found with OpenVDB meshes was that they were far too angular, which wasn't ideal for our simulation. You can see in the following images that when the light hits the honey, there are angles and shadows due to the triangles in the created mesh that wouldn't normally be there.
+
+<div align="center">
+  <table style="width:100%">
+<colgroup>
+      <col width="50%" />
+      <col width="50%" />
+  </colgroup>
+    <tr>
+    <td align="center">
+        <img src="assets/index/openvdb1.png" width="75%" />
+        <figcaption>SPH, 5,000 particles</figcaption>
+        </td>
+        <td align="center">
+        <img src="assets/index/openvdb2.png" width="75%" />
+        <figcaption>SPH, 5,000 particles</figcaption>
+        </td>
+    </tr>
+    </table>
+</div>
+
+This led to our last attempt at "surface reconstruction", which was Metaballs.
 
 #### Metaballs
 We scripted the particle positions at each 16-32 timesteps to each represent a Metaball, using the `bpy` Blender Python package. The most we could render was approximately 3k particles, hence why we were unable to render our SPH simulation using Metaballs.
@@ -185,10 +206,11 @@ We also rendered a scene to mimic our [reference image](/assets/proposal/honey_o
 ## Contributions
 Ashley Chiu
 - Created the base particle model by refactoring `Clothsim`, as well as initial scene setups
-- Incorporated OpenMP parallelization
-- Implemented solid-liquid viscous interactions in the Lagrangian model
-- Helped tune viscosity simulation and debug volume preservation for the Lagrangian model
-- Built up Blender rendering pipeline with shaders, shadows, reflections, caustics, and set up final scenes
+- Incorporated and implemented OpenMP parallelization
+- Implemented solid-liquid viscous adhesion interactions in the Lagrangian model
+- Helped tune liquid-liquid interactions and viscosity, debugged volume preservation for the Lagrangian model
+- Helped with the setup of both marching cubes and OpenVDB
+- Built up Blender rendering pipeline with shaders, shadows, reflections, caustics, and set up final scene lighting and objects
 - Scripted and rendered Metaball images and final videos
 - Completed the milestone slides, video, and write up
 - Contributed to the final slides, video, and write up
@@ -202,8 +224,10 @@ Emmanuel Duarte
 Dana Feng
 - Performed the initial research, determined applicable fluid simulation papers
 - Built the initial Lagrangian model including the viscosity model, particle interpenetration, spatial cell hashing, and liquid-liquid interactions
+- Helped with OpenMP parallelization
 - Led the volume preservation debugging for the Lagrangian model
 - Led integration of marching cubes, tuning isovalues and interpolating extra positions for sparse meshes
+- Helped set up and debug OpenVDB
 - Scripted and rendered Metaball images and final videos
 - Contributed to final write up
 
