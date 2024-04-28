@@ -4,11 +4,6 @@ title: Final Report
 has_right_toc: true
 usemathjax: true
 ---
-
-<p class="warning-message">
-This assignment has not been completed yet.
-</p>
-
 <h2><strong>Honey, I Upped the Viscosity! 🍯</strong></h2>
 Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan
 
@@ -24,7 +19,7 @@ We essentially implemented three different particle simulations: one Lagrangian 
 
 #### Lagrangian Particle Based Model
 [INSERT PARTICLE SIM VIDEO WITHOUT VOLUME PRESERVATION]
-We modeled our simulation off of the paper "Modeling and Rendering Viscous Liquids". We created a similar cell structure that houses a vector of particles for better spatial lookup, and for each particle we hashed the particle to a cell, using the hash key provided in the paper: `541i + 79j + 31k mod table_size`; we did however, scale the `i`, `j`, and `k` by 10 so as to spread the particles more evenly in buckets, and also chose the table size to be 100. In addition, we also integrated OpenMP to speed up all of the for loops interating over each particle, which was not mentioned in the paper but did help tremendously in terms of scaling up the number of particles run for the simulation. At a high level, the paper describes adding forces and gravity to each particle at each timestep $F(p) = \sum_{i} f(p_i) + g$, with adhesion forces, viscosity forces, and friction/interpenetration forces. In terms of adhesion forces, we use the Leonard-Jones potential mentioned in the paper, and follow the sample piecewise graph given for adhesion forces between particles of distance `d`, although we again scale the values to get the desired honey fluid effect: 
+We modeled our simulation off of the paper "Modeling and Rendering Viscous Liquids". We created a similar cell structure that houses a vector of particles for better spatial lookup, and for each particle we hashed the particle to a cell, using the hash key provided in the paper: `541i + 79j + 31k mod table_size`; we did however, scale the `i`, `j`, and `k` by 10 so as to spread the particles more evenly in buckets, and also chose the table size to be 100. In addition, we also integrated OpenMP to speed up all of the for loops interating over each particle, which was not mentioned in the paper but did help tremendously in terms of scaling up the number of particles run for the simulation. At a high level, the paper describes adding forces and gravity to each particle at each timestep $F(p) = \sum_{i} f(p_i) + g$, with adhesion forces, viscosity forces, and friction/interpenetration forces. In terms of adhesion forces, we use the Lennard-Jones potential mentioned in the paper, and follow the sample piecewise graph given for adhesion forces between particles of distance `d`, although we again scale the values to get the desired honey fluid effect: 
 
 {% highlight js %}
   if (distance < 1) {
@@ -55,7 +50,7 @@ We use our own piecewise gaussian function, tuning the function so that it only 
 
 
 [INSERT PARTICLE SIM VIDEO WITH VOLUME PRESERVATION]
-While this initial implementation without volume preservation worked well, we wanted to see if we could get more of a mushroom and pooling effect by implementing volume preservation. Thus, we also implemented volume preservation, as detailed in the paper. First, we calculated the desired density of each particle by this equation: $$\rho_0 &= \sum_{i=1}^{26} \omega(d_i) \\$$, where $$\omega$$ refers to the density smoothing kernel, which we defined as 
+While this initial implementation without volume preservation worked well, we wanted to see if we could get more of a mushroom and pooling effect by implementing volume preservation. Thus, we also implemented volume preservation, as detailed in the paper. First, we calculated the desired density of each particle by this equation: $$\rho_0 = \sum_{i=1}^{26} \omega(d_i) \\$$, where $$\omega$$ refers to the density smoothing kernel, which we defined as 
 {% highlight js %}
 
    double epsilon = 1e-6;
@@ -73,7 +68,7 @@ While this initial implementation without volume preservation worked well, we wa
         return 1.0 - ((distance - LOWERBOUND) / (UPPERBOUND- LOWERBOUND));
     }
 
-{% endhighlight %}, following the paper's lower and upperbound of `2rsqrt(3) to 4r`. We then refine the density calculation by either scaling by `26/n` if the particle had less than 26 neighbors (n neighbors instead). The paper also mentions the derivative of the density, but the paper does not use the derivative in the calculations anywhere, so we did not either. We then calculated the correction vector to be applied to each particle's position: $$\Delta v &= \frac{(c(\rho - \rho_0) \mathbf{pn} - p)}{\|\mathbf{pn} - p\|}$$, where we chose c to be 0.001, rather than 0.1-0.5 as described in the paper.
+{% endhighlight %}, following the paper's lower and upperbound of `2rsqrt(3) to 4r`. We then refine the density calculation by either scaling by `26/n` if the particle had less than 26 neighbors (n neighbors instead). The paper also mentions the derivative of the density, but the paper does not use the derivative in the calculations anywhere, so we did not either. We then calculated the correction vector to be applied to each particle's position: $$\Delta v = \frac{(c(\rho - \rho_0) \mathbf{pn} - p)}{\|\mathbf{pn} - p\|}$$, where we chose c to be 0.001, rather than 0.1-0.5 as described in the paper.
 
 
 We also applied 0.1 as the damping factor when adding each of the correction vectors, as we found that volume preservation without damping resulted in particles being blown away from each other. We also only do one iteration of this correction, as we found that the computation was too intensive/slow for more than 1 iteration.
@@ -100,7 +95,7 @@ We initially tried marching cubes, using the github repo: https://github.com/nih
         <p><em>Lagrangian Particle Simulation (without Volume Preservation), 8000 vs 1000 particles</em></p>
     </div>
     <div style="display: inline-block; width: 45%;">
-        <img src="../assets/index/interplation.png" width="100%" />
+        <img src="../assets/index/interpolation.png" width="100%" />
         <p><em>Lagrangian Particle Simulation (withVolume Preservation), Averaging/Interpolation</em></p>
     </div>
 </div>
@@ -134,7 +129,15 @@ Overall, we learned the importance of exploring and adopting various meshing/ren
 ## Results
 
 ## References
-[ADD ANY BLENDER VIDEOS, SPH VIDEO, SPH FILE, THE MAIN HONEY PAPER]
+We built our particle simulation model off `ClothSim`. For particle simulation, we referenced: 
+- [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84)
+- [An Implicit Viscosity Formulation for SPH Fluids](https://cg.informatik.uni-freiburg.de/publications/2015_SIGGRAPH_viscousSPH.pdf)
+- [Coding Adventures: Simulating Fluids](https://www.youtube.com/watch?v=rSKMYc1CQHE)
+
+To port our particle simulation to Blender and simulate realism, we utilized these resources:
+- [Poligonising a scalar field](https://paulbourke.net/geometry/polygonise/)
+- [Marching Cubes](https://github.com/nihaljn/marching-cubes)
+- [Procedural Bisucit Material (Blender Tutorial)](https://www.youtube.com/watch?v=52dC0yBS35I)
 
 ## Contributions
 
