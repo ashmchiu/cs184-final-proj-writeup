@@ -188,8 +188,7 @@ Ashley Chiu
 - Incorporated OpenMP parallelization
 - Implemented solid-liquid viscous interactions in the Lagrangian model
 - Helped tune viscosity simulation and debug volume preservation for the Lagrangian model
-- Built up Blender rendering pipeline via honey shading, shadows, environment reflections, and caustics
-- Set up Blender final scenes, including creating the bread slice
+- Built up Blender rendering pipeline with shaders, shadows, reflections, caustics, and set up final scenes
 - Scripted and rendered Metaball images and final videos
 - Completed the milestone slides, video, and write up
 - Contributed to the final slides, video, and write up
