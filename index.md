@@ -19,7 +19,7 @@ We effectively implemented two different particle simulations Lagrangian based p
 
 #### Lagrangian Particle Model
 [INSERT PARTICLE SIM VIDEO WITHOUT VOLUME PRESERVATION]
-We modeled our simulation off of [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84). We created a similar cell structure that houses a vector of particles for better spatial lookup, and for each particle we hashed the particle to a cell, using the hash key provided in the paper: `541i + 79j + 31k mod table_size`; we did however, scale the `i`, `j`, and `k` by 10 so as to spread the particles more evenly in buckets, and also chose the table size to be 100. In addition, we also integrated OpenMP to speed up all of the for loops interating over each particle, which was not mentioned in the paper but did help tremendously in terms of scaling up the number of particles run for the simulation. At a high level, the paper describes adding forces and gravity to each particle at each timestep $F(p) = \sum_{i} f(p_i) + g$, with adhesion forces, viscosity forces, and friction/interpenetration forces. For adhesion forces, the Lennard-Jones potential was used, following a sample piecewise graph given between particles of distance `d`. 
+We modeled our simulation off of [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84). We created a similar cell structure that houses a vector of particles for better spatial lookup, and for each particle we hashed the particle to a cell, using the hash key provided: `541i + 79j + 31k mod table_size`; we did however, scale the `i`, `j`, and `k` by 10 so as to spread the particles more evenly in buckets, and set the table size to 100. In addition, we also integrated OpenMP parallelization over all possible `for` loops, which help tremendously so our simulations were no longer buffering at every frame. At a high level, the paper describes adding forces and gravity to each particle at each timestep $F(p) = \sum_{i} f(p_i) + g$, with adhesion forces, viscosity forces, and friction/interpenetration forces. For adhesion forces, the Lennard-Jones potential was used, following a sample piecewise graph given between particles of distance `d`. 
 
 Instead of using adhesion forces between the honey and the sphere/bread as described in the paper, however, we use friction forces instead, and calculate a correction vector to ensure that there is adhesion to the bottom of the sphere only if the liquid particle is within a certain proximity to the sphere. We also apply the collision calculations between the particles and sphere so as to prevent the particles from sinking into the sphere. In terms of viscosity forces, we use the paper's momentum equations to calculate the momentum exchange: 
 
@@ -32,7 +32,8 @@ $$
 We use our own piecewise gaussian function, tuning the function so that it only returns a gaussian value if the distance between two particles is less than `0.4`, rather than the paper's specified `4-6`. Then, we explicitly convert the particle momentum to a force by dividing it by the change in time. We also add damping constants to all the forces, which was not mentioned in the paper, but we found that without these constants, the particles would explode and basically repel each other violently. The constants we chose were 0.1 and 0.01 for adhesion and viscosity respectively. Finally, we implemented interpenetration prevention, which was not at all described in detail in the paper, so we ended up just adding a correction vector to move two particles apart if they were overlapping one another. It was interesting as we had to calculate distance between two particles while taking into account their radii rather than just the difference between their center positions. 
 
 
-[INSERT PARTICLE SIM VIDEO WITH VOLUME PRESERVATION]
+[TODO: INSERT PARTICLE SIM VIDEO WITH VOLUME PRESERVATION]
+
 While this initial implementation without volume preservation worked well, we wanted to see if we could get more of a mushroom and pooling effect by implementing volume preservation. Thus, we also implemented volume preservation, as detailed in the paper. First, we calculated the desired density of each particle by this equation: $$\rho_0 = \sum_{i=1}^{26} \omega(d_i) \\$$, where $$\omega$$ refers to a piecewise density smoothing kernel, following the paper's lower and upperbound of `2rsqrt(3) to 4r`. We then refine the density calculation by either scaling by `26/n` if the particle had less than 26 neighbors (n neighbors instead). The paper also mentions the derivative of the density, but the paper does not use the derivative in the calculations anywhere, so we did not either. We then calculated the correction vector to be applied to each particle's position: $$\Delta v = \frac{(c(\rho - \rho_0) \mathbf{p_n} - p)}{\|\mathbf{p_n} - p\|}$$, where we chose c to be 0.001, rather than 0.1-0.5 as described in the paper.
 
 
@@ -43,7 +44,7 @@ Overall, implementing the particle physics allowed us to understand the amount o
 
 
 #### Smoothed Particle Hydrodynamics
-[INSERT VIDEO WITH THEIR SPH]
+[TODO: INSERT VIDEO WITH THEIR SPH]
 
 
 ### Surface Reconstruction
@@ -71,42 +72,52 @@ Finding Marching Cubes to be a common solution, we initially tried building off 
 
 
 #### OpenVDB
-[TALK ABOUT INSTALLATION PROBLEMS, LIMITED DOCUMENTATION, CONVERTING FROM POINTS TO VOLUME TO MESH]
+When attempting to generate meshes for surface reconstruction from particles in OpenVDB, we struggled a great deal with installation problems as all four had hours of compilation errors and package issues in installation. Beyond this, there was limited documentation, etc. etc. TODO: FINSIH
+[TODO: TALK ABOUT INSTALLATION PROBLEMS, LIMITED DOCUMENTATION, CONVERTING FROM POINTS TO VOLUME TO MESH]
 
 #### Metaballs
+Our last attempt at "surface reconstruction" was to script the particle positions at each 16-32 timesteps to each represent a Metaball, using the `bpy` Blender Python package. The most we could render was approximately 3k particles, hence why we were unable to render our SPH simulation using Metaballs.
 
-In our existing simulation, we wrote a script to record particle positions every 16-32 timesteps, and then used the Blender Python API to write another script to parse the particles and render them one by one individually. We found that the most amount of particles we could render was around 3k, hence we were not able to render the SPH simulation.
+Tuning the size of Metaballs so it didn't look like individual orbs of honey (or honey boba), we set the Metaball size to 0.04 to 0.07 for simulations with 2,000-3,000 particles, and to 0.08 to 0.1 for simulations with 1,000 particles.
 
-We had to tune the size of the metaballs, as well as make sure we have at least 1k particles, or else we ended up with boba like honey that had individual orbs. If there were 2k or 3k particles, metaball sizes of 0.04 to 0.07 were enough, while with only 1k particles, we had to use 0.08 to 0.1.
-[INSERT BOBA VIDEO]
-[INSERT OFF CENTER SPHERE VIDEO]
+[TODO: INSERT BOBA VIDEO]
+[TODO: INSERT OFF CENTER SPHERE VIDEO]
 
-Overall, we learned the importance of exploring and adopting various meshing/rendering techniques, as well as the importance of using suitable and well documented methods. We also got a taste of just how tedious rendering can be - both Ashley and Dana had to run Blender/render all the frames over the course of 2 full days to get only a 2-3 second video!
-
+Overall, we learned the importance of exploring and adopting various meshing techniques, and the importance of using suitable and well-documented methods.
 
 ### Blender-ing Rendering
-[TALK ABOUT BLENDER SHADING, CAUSTICS, BREAD, etc..]
-
-### Speed Ups
+Finally, after porting over the Metaballs into Blender, we used the Cycles Engine (for physically-based path tracing) and read through a multitude of documentation to set up the final rendering scenes, including defining nodes for honey shading, environment shadows and reflections, caustics, and using  [Procedural Bisucit Material (Blender Tutorial)](https://www.youtube.com/watch?v=52dC0yBS35I) as a guide to modeling a slice of bread.
 
 ### Problems Encountered
-Early on, we struggled with density preservation as honey dripped and hit a plane. Honey needed to stay viscous and remain stuck to the sphere while it dripped off at the bottom, which was a difficult task. We implemented two separate viscosity models in order to attempt to fix this from our milestone, using [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84) and [SPH Fluids in Computer Graphics](https://cg.informatik.uni-freiburg.de/publications/2014_EG_SPH_STAR.pdf). Ultimately, the tuning of [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84) produced better results, and as such, most of our polished renders occurred under this physics engine. We learned to divide and conquer work here so pairings would work on separate physics engines to improve them.
+Early on, we struggled with density preservation as honey dripped and hit a plane. Honey needed to stay viscous and remain stuck to the sphere while it dripped off at the bottom, which was a difficult task. We implemented two separate viscosity models in order to attempt to fix this from our milestone, using [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84) and [SPH Fluids in Computer Graphics](https://cg.informatik.uni-freiburg.de/publications/2014_EG_SPH_STAR.pdf). Ultimately, the tuning of [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84) produced better results, and as such, most of our polished renders occurred under this physics engine.
 
-Originally, we considered doing surface reconstruction via Marching Cubes and OpenVDB, however, after gaining little progress (sparse or inverted meshes), we salvaged via Metaballs in Blender. 
+Originally, we considered doing surface reconstruction via Marching Cubes and OpenVDB, however, after gaining little progress (sparse or inverted meshes), we salvaged via Metaballs in Blender. This took up a lot of our time as well, as we had to make multiple pivots in our implementation.
+
+As a whole, tuning parameters was fairly difficult, from viscosity parameters and the Lennard-Jones potential to Metaball sizes and color realism of honey. This required a lot of trial and error on our end to determine what looked the most "realistic", which was difficult to standardize.
+
+Through these two problems, we learned to divide and conquer work here so pairings would work on separate physics engines or surface reconstruction methods to gain an understanding of viability.
 
 ## Results
+TODO
 
 ## References
-We built our particle simulation model off `ClothSim`. For particle simulation, we referenced: 
 - [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84)
 - [An Implicit Viscosity Formulation for SPH Fluids](https://cg.informatik.uni-freiburg.de/publications/2015_SIGGRAPH_viscousSPH.pdf)
 - [Coding Adventures: Simulating Fluids](https://www.youtube.com/watch?v=rSKMYc1CQHE)
-
-To port our particle simulation to Blender and simulate realism, we utilized these resources:
 - [Poligonising a scalar field](https://paulbourke.net/geometry/polygonise/)
 - [Marching Cubes](https://github.com/nihaljn/marching-cubes)
 - [Procedural Bisucit Material (Blender Tutorial)](https://www.youtube.com/watch?v=52dC0yBS35I)
 
 ## Contributions
 
-Navigate to previous checkpoints in our journey to render honey -> [milestone](/milestone.md) \| [proposal](/proposal.md)
+TODO
+
+Ashley Chiu
+
+Emmanuel Duarte
+
+Dana Feng
+
+Raymond Tan
+
+<i>navigate to checkpoints in our journey to render honey:</i> [final report](/index.md) -> [milestone](/milestone.md) -> [proposal](/proposal.md)
