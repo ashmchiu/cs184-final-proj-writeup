@@ -21,15 +21,7 @@ We effectively implemented two different particle simulations Lagrangian based p
 #### Lagrangian Particle Model
 We modeled our simulation off of [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84). We created a similar cell structure that houses a vector of particles for better spatial lookup, and for each particle we hashed the particle to a cell, using the hash key provided: `541i + 79j + 31k mod table_size`; we did however, scale the `i`, `j`, and `k` by 10 so as to spread the particles more evenly in buckets, and set the table size to 100. In addition, we also integrated OpenMP parallelization over all possible `for` loops, which help tremendously so our simulations were no longer buffering at every frame. At a high level, the paper describes adding forces and gravity to each particle at each timestep $F(p) = \sum_{i} f(p_i) + g$, with adhesion forces, viscosity forces, and friction/interpenetration forces. For adhesion forces, the Lennard-Jones potential was used, following a sample piecewise graph given between particles of distance `d`. 
 
-Instead of using adhesion forces between the honey and the sphere/bread as described in the paper, however, we use friction forces instead, and calculate a correction vector to ensure that there is adhesion to the bottom of the sphere only if the liquid particle is within a certain proximity to the sphere. We also apply the collision calculations between the particles and sphere so as to prevent the particles from sinking into the sphere. In terms of viscosity forces, we use the paper's momentum equations to calculate the momentum exchange: 
-
-$$
-P_{exch} = \frac{v_k(d_{pn})(P_p - P_{p_n})\delta t}{2 \sum_{i=0}^{n} k(d_i)} \\
-P_p = P_p + P_{exch} \\
-P_{pn} = P_{p_n} - P_{exch}
-$$ 
-
-We use our own piecewise gaussian function, tuning the function so that it only returns a gaussian value if the distance between two particles is less than `0.4`, rather than the paper's specified `4-6`. Then, we explicitly convert the particle momentum to a force by dividing it by the change in time. We also add damping constants to all the forces, which was not mentioned in the paper, but we found that without these constants, the particles would explode and basically repel each other violently. The constants we chose were 0.1 and 0.01 for adhesion and viscosity respectively. Finally, we implemented interpenetration prevention, which was not at all described in detail in the paper, so we ended up just adding a correction vector to move two particles apart if they were overlapping one another. It was interesting as we had to calculate distance between two particles while taking into account their radii rather than just the difference between their center positions. 
+Instead of using adhesion forces between the honey and the sphere/bread as described in the paper, we use friction forces instead, and calculate a correction vector to ensure that there is adhesion to the bottom of the sphere only if the liquid particle is within a certain proximity to the sphere. We also apply the collision calculations between the particles and sphere so as to prevent the particles from sinking into the sphere. In terms of viscosity forces, we use the paper's momentum equations to calculate the momentum exchange. However, we also created and tuned a piecewise gaussian function so that it only returns a gaussian value if the distance between two particles is less than `0.4`, rather than the paper's specified `4-6`. Then, we explicitly convert the particle momentum to a force by dividing it by the change in time. We also add damping constants to all the forces, which was not mentioned in the paper, but we found that without these constants, the particles would explode and basically repel each other violently. The constants we chose were 0.1 and 0.01 for adhesion and viscosity respectively. Finally, we implemented interpenetration prevention, which was not at all described in detail in the paper, so we ended up just adding a correction vector to move two particles apart if they were overlapping one another. It was interesting as we had to calculate distance between two particles while taking into account their radii rather than just the difference between their center positions. 
 
 While this initial implementation without volume preservation worked well, we wanted to see if we could get more of a mushroom and pooling effect by implementing volume preservation. Thus, we also implemented volume preservation, as detailed in the paper. First, we calculated the desired density of each particle by this equation: $$\rho_0 = \sum_{i=1}^{26} \omega(d_i) \\$$, where $$\omega$$ refers to a piecewise density smoothing kernel, following the paper's lower and upperbound of `2rsqrt(3) to 4r`. We then refine the density calculation by either scaling by `26/n` if the particle had less than 26 neighbors (n neighbors instead). The paper also mentions the derivative of the density, but the paper does not use the derivative in the calculations anywhere, so we did not either. We then calculated the correction vector to be applied to each particle's position: $$\Delta v = \frac{(c(\rho - \rho_0) \mathbf{p_n} - p)}{\|\mathbf{p_n} - p\|}$$, where we chose c to be 0.001, rather than 0.1-0.5 as described in the paper.
 
@@ -191,15 +183,35 @@ We also rendered a scene to mimic our [reference image](/assets/proposal/honey_o
 - [Procedural Bisucit Material (Blender Tutorial)](https://www.youtube.com/watch?v=52dC0yBS35I)
 
 ## Contributions
-
-TODO
-
 Ashley Chiu
+- Created the base particle model by refactoring `Clothsim`, as well as initial scene setups
+- Incorporated OpenMP parallelization
+- Implemented solid-liquid viscous interactions in the Lagrangian model
+- Helped tune viscosity simulation and debug volume preservation for the Lagrangian model
+- Built up Blender rendering pipeline via honey shading, shadows, environment reflections, and caustics
+- Set up Blender final scenes, including creating the bread slice
+- Scripted and rendered Metaball images and final videos
+- Completed the milestone slides, video, and write up
+- Contributed to the final slides, video, and write up
 
 Emmanuel Duarte
+- Worked on adhesion, pooling, and volume preservation for the Lagrangian model
+- Worked around the structure of Homework 4's code structure and abstractions to implement SPH from the ground up
+- Worked with OpenVDB to convert SPH point clouds to volumes, and then to meshes. Took those meshes, turned them into .obj files, and imported into blender for animation stitching. Rendered out frames for write up and presentation.
+- Contributed to final slides and write up
 
 Dana Feng
+- Performed the initial research, determined applicable fluid simulation papers
+- Built the initial Lagrangian model including the viscosity model, particle interpenetration, spatial cell hashing, and liquid-liquid interactions
+- Led the volume preservation debugging for the Lagrangian model
+- Led integration of marching cubes, tuning isovalues and interpolating extra positions for sparse meshes
+- Scripted and rendered Metaball images and final videos
+- Contributed to final write up
 
 Raymond Tan
+- Helped with researching ideas during project proposal stage
+- Worked on SPH simulation
+- Worked on incorporating OpenVDB into simulation to create meshes out of particles to render in Blender
+- Contributed to final slides and write up
 
 <i>navigate to checkpoints in our journey to render honey:</i> [final report](/index.md) -> [milestone](/milestone.md) -> [proposal](/proposal.md)
