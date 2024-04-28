@@ -5,10 +5,10 @@ has_right_toc: true
 usemathjax: true
 ---
 <h2><strong>Honey, I Upped the Viscosity! 🍯</strong></h2>
-Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan | [Slides](https://docs.google.com/presentation/d/1piaKM1i2I8qUL0LpA0blxNTJihbHbPOOc3b5brOU8vE/edit?usp=sharing) | [Video](https://www.youtube.com/watch?v=Ucls9YOQVhE)
+Team 2: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan | [Slides](https://docs.google.com/presentation/d/1piaKM1i2I8qUL0LpA0blxNTJihbHbPOOc3b5brOU8vE/edit?usp=sharing) | [Video](https://www.youtube.com/watch?v=Ucls9YOQVhE)
 
 ## Abstract
-TODO: ash
+Viscous fluid simulation has been an interesting and fascinating problem in computer graphics. In this project, our main object was to render a realistic simulation of honey, which included three components: a fluid physics engine for honey, surface reconstruction, and rendering in Blender. We first created two separate particle simulations. Our first was based on [Modeling and Rendering Viscous Liquids](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=bdbe45284686a54f3284fdf98759f099e3a95e84), which we split into a version without volume preservation (since it ran faster) and a version with volume preservation (which looked more realistic). Our second fluid simulation model built off [An Implicit Viscosity Formulation for SPH Fluids](https://cg.informatik.uni-freiburg.de/publications/2015_SIGGRAPH_viscousSPH.pdf) and [Coding Adventures: Simulating Fluids](https://www.youtube.com/watch?v=rSKMYc1CQHE), but required far more particles to look realistic. We utilized cell spatial hashing and OpenMP parallelization for simulation speedup. From there, we tried a multitude of surface reconstruction methods. We started with marching cubes, which output sparse meshes, then OpenVDB, whose meshes were too angular, and finally settled on Metaballs. Finally, to render our results, we used Blender to simulate visual realism, generating scenes with sphere collisions and honey falling on bread.
 
 ## Technical Approach
 
@@ -122,10 +122,10 @@ When attempting to generate meshes for surface reconstruction from particles in 
 
 To get the meshes to output using OpenVDB, we first had to convert our particles to a custom `MyParticle` struct, which we defined to store the position, velocity, and radius of the particle. We then constructed a grid using the OpenVDB `createLevelSet`. Next, we `raster`ed to set the grain size, and initialize the particles into spheres for our grid. Finally, we used `VolumeToMesh` to get a `.obj` mesh file from our grid, importing these files into Blender, and stitching using [Stop-Motion-Obj](https://github.com/neverhood311/Stop-motion-OBJ). 
 
-We found the animation to be a lot more smooth with this method, as all the particles remained connected during the animation, much like real honey would while being dropped onto a sphere. Generating the obj files was relatively quick as well, which allowed us to perform parameter-tuning a lot easier. 
+We found the animation to be a lot more smooth with this method, as all the particles remained connected during the animation, much like real honey would while being dropped onto a sphere. Generating the obj files was relatively quick as well, which allowed us to perform parameter-tuning a lot easier. However, one problem we found with OpenVDB meshes was that they were far too angular, which wasn't ideal for our simulation, which led to our last attempt at "surface reconstruction", which was Metaballs.
 
 #### Metaballs
-Our last attempt at "surface reconstruction" was to script the particle positions at each 16-32 timesteps to each represent a Metaball, using the `bpy` Blender Python package. The most we could render was approximately 3k particles, hence why we were unable to render our SPH simulation using Metaballs.
+We scripted the particle positions at each 16-32 timesteps to each represent a Metaball, using the `bpy` Blender Python package. The most we could render was approximately 3k particles, hence why we were unable to render our SPH simulation using Metaballs.
 
 Tuning the size of Metaballs so it didn't look like individual orbs of honey (or honey boba), we set the Metaball size to 0.04 to 0.07 for simulations with 2,000-3,000 particles, and to 0.08 to 0.1 for simulations with 1,000 particles.
 
