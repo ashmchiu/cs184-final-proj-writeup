@@ -15,10 +15,6 @@ Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan
 ## Abstract
 
 ## Technical Approach
-A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail).
-A description of problems encountered and how you tackled them.
-A description of lessons learned.
-
 
 ### Starting Point and Set Up
 We built off of CS184's Project 4; we converted the PointMass class to a Particle class, with attributes such as velocity, radius, mass, and momentum, as well as viscosity. We then created a new scene with 3 planes, and one sphere. In terms of the particles, we put all of their positions into a ball first of 0.08 radius, and used used openGL's `GL_POINTS` and drew them into an array to render them as points.
@@ -122,15 +118,22 @@ We initially tried marching cubes, using the github repo: https://github.com/nih
 
 
 #### OpenVDB
+[TALK ABOUT INSTALLATION PROBLEMS, LIMITED DOCUMENTATION, CONVERTING FROM POINTS TO VOLUME TO MESH]
 
-#### Metaballs
+#### Metaballs and Modeling in Blender
 
+In our existing simulation, we wrote a script to record particle positions every 16-32 timesteps, and then used the Blender Python API to write another script to parse the particles and render them one by one individually. We found that the most amount of particles we could render was around 3k, hence we were not able to render the SPH simulation.
 
+We had to tune the size of the metaballs, as well as make sure we have at least 1k particles, or else we ended up with boba like honey that had individual orbs. If there were 2k or 3k particles, metaball sizes of 0.04 to 0.07 were enough, while with only 1k particles, we had to use 0.08 to 0.1.
+[INSERT BOBA VIDEO]
 
+Overall, we learned the importance of exploring and adopting various meshing/rendering techniques, as well as the importance of using suitable and well documented methods. We also got a taste of just how tedious rendering can be - both Ashley and Dana had to run Blender/render all the frames over the course of 2 full days to get only a 2-3 second video!
 
+[TALK ABOUT BLENDER SHADING, CAUSTICS, BREAD, etc..]
 ## Results
 
 ## References
+[ADD ANY BLENDER VIDEOS, SPH VIDEO, SPH FILE, THE MAIN HONEY PAPER]
 
 ## Contributions
 
