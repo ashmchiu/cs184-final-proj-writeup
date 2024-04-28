@@ -147,6 +147,15 @@ Through these two problems, we learned to divide and conquer work here so pairin
 
 ## Results
 TODO: ash add finished vid
+<div align="center">
+  <table style="width:100%">
+    <tr>
+        <td align="center">
+        <img src="assets/index/bread.gif" width="50%" />
+        </td>
+    </tr>
+    </table>
+</div>
 
 <div align="center">
   <table style="width:100%">
