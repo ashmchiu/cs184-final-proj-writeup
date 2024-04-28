@@ -64,15 +64,15 @@ Finding Marching Cubes to be a common solution, we initially tried building off 
   </colgroup>
     <tr>
         <td align="center">
-        <img src="../assets/index/8000 vs 1000.png" width="75%" />
+        <img src="assets/index/8000 vs 1000.png" width="75%" />
         <figcaption>Lagrangian Simulation (without volume preservation), 8000 vs 1000 particles</figcaption>
         </td>
         <td align="center">
-        <img src="../assets/index/interpolation.png" width="75%" />
+        <img src="assets/index/interpolation.png" width="75%" />
         <figcaption>Lagrangian Simulation (with volume preservation), Averaging/Interpolation</figcaption>
         </td>
         <td align="center">
-        <img src="../assets/index/sph.png" width="50%" />
+        <img src="assets/index/sph.png" width="50%" />
         <figcaption>SPH Particle Simulation with Poly6 kernel isovalues (Ball of honey) </figcaption>
         </td>
     </tr>
