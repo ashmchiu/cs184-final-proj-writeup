@@ -5,7 +5,7 @@ has_right_toc: true
 usemathjax: true
 ---
 <h2><strong>Honey, I Upped the Viscosity! 🍯</strong></h2>
-Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan
+Team Members: Ashley Chiu, Emmanuel Duarte, Dana Feng, Raymond Tan | [Slides](https://docs.google.com/presentation/d/1piaKM1i2I8qUL0LpA0blxNTJihbHbPOOc3b5brOU8vE/edit?usp=sharing) | [Video](https://www.youtube.com/watch?v=Ucls9YOQVhE)
 
 ## Abstract
 TODO: ash
@@ -41,10 +41,13 @@ Overall, implementing the particle physics allowed us to understand the amount o
 
 
 #### Smoothed Particle Hydrodynamics
+Smoothed Particle Hydrodynamics (SPH) is a method of incorporating neighboring particles into calculations for a given particle. Our model was largely based on [An Implicit Viscosity Formulation for SPH Fluids](https://cg.informatik.uni-freiburg.de/publications/2015_SIGGRAPH_viscousSPH.pdf). First, we determined a smoothing radius for each particle – this would determine at what range would other particles have an effect on the current one. After tweaking with this parameter, we found optimal results when `PARTICLE_SMOOTHING_RADIUS` was set to `0.1`. SPH requires identifying neighboring particles to calculate interactions. To make the process of looking up neighbor particles more efficient, we used spatial cell hashing, which was largely inspired by the tutorial video Coding Adventure: Simulating Fluids. Spatial Cell Hashing works by assigning each particle its own “particle index”, which is an unique identifier for a particle within our simulation. We associate with each particle index a `cellKey`, which is a hashed value based on the position of the current particle. The `cellKey` determines which cell the current particle belongs to. This pair is then stored into a vector we designate as `spatialLookup`. Afterwards, we sort `spatialLookup` by the `cellKey`, which makes it so that all particles within the same cell are next to each other in the the list. We wrote a function called `ForeachPointWithinRadius`, which was a generic function that returns all the neighboring particles within radius `PARTICLE_SMOOTHING_RADIUS` as an `std::unordered_set` at a given snapshot of the simulation. The code loops through every one of the 27 offsets we can go through in 3D space, getting the cell associated with the position of the particle + the current offset. These offsets can lead us to loop through the same cells, which is why a `std::unordered_set` data structure is used to prevent duplicate neighboring particles from being returned.
 
-[TODO: RAYMOND & EMAN WRITE]
-testing
+SPH was used in our code for various purposes, ranging from calculating individual densities of particles at each timestep of our simulation, to calculating how neighboring particles would affect pressure forces applied to a given particle. Here, we used a smoothing kernel function to determine the influence a neighboring particle had, which varied in sync with the euclidean distance of the neighboring particle to the given particle. The smoothing kernel function used a scale of $\frac{315}{64 \cdot \pi \cdot \mid r \mid^9}$. This value is derived from the normalization condition of the cubic spline kernel function in 3D, as outlined in [An Implicit Viscosity Formulation for SPH Fluids](https://cg.informatik.uni-freiburg.de/publications/2015_SIGGRAPH_viscousSPH.pdf). 
 
+Overall, we found SPH to be a very intuitive approach to honey simulation, and a quite fun one to implement. A challenge we faced was finding the optimal `PARTICLE_SMOOTHING_RADIUS` – we didn’t want to choose a value that was too high, as that would encompass too many neighboring particles. Choosing a value that was too low would result in not enough neighboring particles being considered, so we had to play around with this value and see how it affected the simulation. 
+
+#### Particle Simulation Videos
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 100%;">
 
   <div style="width: calc(33.33% - 10px); margin-bottom: 20px;">
@@ -91,7 +94,7 @@ We included all three (particularly, two versions of the Lagrangian simulation) 
 
 ### Surface Reconstruction
 
-We explored 3 separate meshing/rendering techniques, and found that metaballs in Blender was the most suitable for our simulation. We tried Marching Cubes on all three of our particle simulations, tried OpenVDB on our SPH simulation, and applied Metaballs to our two Lagrangian particle simulations, as our SPH simulation required 10k particles, which was too much for metaballs.
+We explored 3 separate meshing/rendering techniques, and found that metaballs in Blender was the most suitable for our simulation. We tried Marching Cubes on all three of our particle simulations, tried OpenVDB on our SPH simulation, and applied Metaballs to our two Lagrangian particle simulations, as our SPH simulation required 5,000 particles, which was too much for Metaballs.
 
 #### Marching Cubes
 
@@ -123,10 +126,11 @@ Finding Marching Cubes to be a common solution, we initially tried building off 
 
 
 #### OpenVDB
-When attempting to generate meshes for surface reconstruction from particles in OpenVDB, we struggled a great deal with installation problems as all four had hours of compilation errors and package issues in installation. Beyond this, there was limited documentation, etc. etc. 
+When attempting to generate meshes for surface reconstruction from particles in OpenVDB, we struggled a great deal with installation problems as all four had hours of compilation errors and package issues in installation. We are really thankful to the two TAs that were able to help us get this package installed and working on our machines. Beyond this, there was limited documentation online regarding using OpenVDB as a method of converting particle positions directly to a mesh. We used a lot of trial and error to see which methods of OpenVDB could be used in getting us to our goal. 
 
-[TODO: RAYMOND & EMAN WRITE]
-[TALK ABOUT INSTALLATION PROBLEMS, LIMITED DOCUMENTATION, CONVERTING FROM POINTS TO VOLUME TO MESH]
+To get the meshes to output using OpenVDB, we first had to convert our particles to a custom `MyParticle` struct, which we defined to store the position, velocity, and radius of the particle. We then constructed a grid using the OpenVDB `createLevelSet`. Next, we `raster`ed to set the grain size, and initialize the particles into spheres for our grid. Finally, we used `VolumeToMesh` to get a `.obj` mesh file from our grid, importing these files into Blender, and stitching using [Stop-Motion-Obj](https://github.com/neverhood311/Stop-motion-OBJ). 
+
+We found the animation to be a lot more smooth with this method, as all the particles remained connected during the animation, much like real honey would while being dropped onto a sphere. Generating the obj files was relatively quick as well, which allowed us to perform parameter-tuning a lot easier. 
 
 #### Metaballs
 Our last attempt at "surface reconstruction" was to script the particle positions at each 16-32 timesteps to each represent a Metaball, using the `bpy` Blender Python package. The most we could render was approximately 3k particles, hence why we were unable to render our SPH simulation using Metaballs.
@@ -146,17 +150,18 @@ Finally, after porting over the Metaballs into Blender, we used the Cycles Engin
 Through these two problems, we learned to divide and conquer work here so pairings would work on separate physics engines or surface reconstruction methods to gain an understanding of viability.
 
 ## Results
-TODO: ash add finished vid
+Honey, Let's Go Picnicking! In the video below, we show our rendered honey dripping and pooling on a slice of bread. This uses 2,000 particles using our Lagrangian Particle Model with volume preservation.
 <div align="center">
   <table style="width:100%">
     <tr>
         <td align="center">
-        <img src="assets/index/bread.gif" width="50%" />
+        <img src="assets/index/bread.gif" width="37.5%" />
         </td>
     </tr>
     </table>
 </div>
 
+We also rendered a scene to mimic our [reference image](/assets/proposal/honey_on_sphere.png). 
 <div align="center">
   <table style="width:100%">
 <colgroup>
@@ -166,11 +171,11 @@ TODO: ash add finished vid
     <tr>
     <td align="center">
         <img src="assets/index/lagrangian_no_vol_preservation.gif" width="75%" />
-        <figcaption>Lagrangian Simulation (w/o volume preservation), 3000 particles</figcaption>
+        <figcaption>Lagrangian Simulation (w/o volume preservation), 3,000 particles</figcaption>
         </td>
         <td align="center">
         <img src="assets/index/lagrangian_vol_preservation.gif" width="75%" />
-        <figcaption>Lagrangian Simulation (w/ volume preservation), 2000 particles</figcaption>
+        <figcaption>Lagrangian Simulation (w/ volume preservation), 2,000 particles</figcaption>
         </td>
     </tr>
     </table>
@@ -182,6 +187,7 @@ TODO: ash add finished vid
 - [Coding Adventures: Simulating Fluids](https://www.youtube.com/watch?v=rSKMYc1CQHE)
 - [Poligonising a scalar field](https://paulbourke.net/geometry/polygonise/)
 - [Marching Cubes](https://github.com/nihaljn/marching-cubes)
+- [Stop-Motion-Obj](https://github.com/neverhood311/Stop-motion-OBJ)
 - [Procedural Bisucit Material (Blender Tutorial)](https://www.youtube.com/watch?v=52dC0yBS35I)
 
 ## Contributions
