@@ -56,18 +56,27 @@ We explored 3 separate meshing/rendering techniques, and found that metaballs in
 Finding Marching Cubes to be a common solution, we initially tried building off [this GitHub repository](https://github.com/nihaljn/marching-cubes), debugging and changing codes to parse our particle position files and tuning isovalues. However, our resulting images always ended up with individual cubes per particle or inverted meshes that did not resemble fluids. We tried increasing the number of particles and interpolating to produce more densely populated particles, both to no avail.
 
 <div align="center">
-    <div style="display: inline-block; width: 30%;">
+  <table style="width:100%">
+<colgroup>
+      <col width="30%" />
+      <col width="30%" />
+      <col width="30%" />
+  </colgroup>
+    <tr>
+        <td align="center">
         <img src="../assets/index/8000 vs 1000.png" width="75%" />
         <figcaption>Lagrangian Simulation (without volume preservation), 8000 vs 1000 particles</figcaption>
-    </div>
-    <div style="display: inline-block; width: 30%;">
+        </td>
+        <td align="center">
         <img src="../assets/index/interpolation.png" width="75%" />
         <figcaption>Lagrangian Simulation (with volume preservation), Averaging/Interpolation</figcaption>
-    </div>
-    <div style="display: inline-block; width: 30%;">
+        </td>
+        <td align="center">
         <img src="../assets/index/sph.png" width="50%" />
         <figcaption>SPH Particle Simulation with Poly6 kernel isovalues (Ball of honey) </figcaption>
-    </div>
+        </td>
+    </tr>
+    </table>
 </div>
 
 
